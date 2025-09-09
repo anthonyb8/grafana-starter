@@ -1,4 +1,5 @@
-// POstgres 
+// --  Loki  -- 
+
 // Debug - check what files exist
 local.file_match "postgres_logs" {
 	path_targets = [
@@ -29,11 +30,16 @@ loki.process "add_labels" {
 // Write to Loki
 loki.write "grafana_loki" {
 	endpoint {
-		url = "http://loki:3100/loki/api/v1/push"
+		url = env("LOKI_URL")
+
+		basic_auth {
+			username = env("LOKI_USER")
+			password = env("LOKI_API_KEY")
+		}
 	}
 }
 
-// Prometheus 
+// -- Prometheus -- 
 prometheus.exporter.unix "local_system" { }
 
 prometheus.scrape "scrape_metrics" {
@@ -54,11 +60,11 @@ prometheus.relabel "filter_metrics" {
 
 prometheus.remote_write "metrics_service" {
 	endpoint {
-		url = "http://prometheus:9090/api/v1/write"
+		url = env("PROMETHEUS_WRITE_URL")
 
-		// basic_auth {
-		//   username = "admin"
-		//   password = "admin"
-		// }
+		basic_auth {
+			username = env("PROMETHEUS_USER")
+			password = env("PROMETHEUS_API_KEY")
+		}
 	}
 }
