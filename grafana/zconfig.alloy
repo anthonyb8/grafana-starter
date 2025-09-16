@@ -29,7 +29,7 @@ loki.process "add_labels" {
 // Write to Loki
 loki.write "grafana_loki" {
 	endpoint {
-		url = env("LOKI_URL")
+		url = "http://loki:3100/loki/api/v1/push"
 	}
 }
 
@@ -54,7 +54,7 @@ prometheus.relabel "filter_metrics" {
 
 prometheus.remote_write "metrics_service" {
 	endpoint {
-		url = env("PROMETHEUS_URL")
+		url = "http://prometheus:9090/api/v1/write"
 
 		// basic_auth {
 		//   username = "admin"

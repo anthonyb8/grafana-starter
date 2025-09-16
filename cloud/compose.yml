@@ -1,5 +1,5 @@
 services:  
-  postgres_dev:
+  postgres:
     image: postgres:16
     restart: unless-stopped
     volumes:
@@ -7,24 +7,36 @@ services:
     environment:
       POSTGRES_USER: root
       POSTGRES_PASSWORD: example
-      POSTGRES_DB: appdb
+      POSTGRES_DB: testdb
     networks: 
       - alloy-net
+      - db-net
     command: >
       postgres -c logging_collector=on
                -c log_directory='log'
                -c log_filename='postgresql.log'
-               -c log_statement='all'
+               -c log_statement='mod'
                -c log_destination='csvlog,stderr'
                -c log_min_messages=info
                -c log_rotation_age=0
                -c log_rotation_size=0
                -c log_truncate_on_rotation=off
 
+  dbmate:
+    image: amacneil/dbmate
+    depends_on:
+      - postgres
+    environment:
+      - DATABASE_URL=postgres://root:example@postgres:5432/testdb?sslmode=disable
+    volumes:
+      - ../db/migrations:/db/migrations
+    networks:
+      - db-net
+    command: ["--wait","up"]
+
   alloy:
     image: grafana/alloy:latest
-    container_name: alloy
-    env_file: 
+    env_file:
       - .env
     volumes:
       - ./config.alloy:/etc/alloy/config.alloy:ro
@@ -33,15 +45,15 @@ services:
     networks:
       - alloy-net
     depends_on:
-      # - loki
-      - postgres_dev
+      - postgres
 
 volumes:
   postgres-data:
   alloy_data:
-  # prometheus_data:
-  # grafana_data:
 
 networks:
   alloy-net:
+    driver: bridge
+
+  db-net:
     driver: bridge
