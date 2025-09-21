@@ -1,7 +1,7 @@
 # prometheus-web-config.yml
 tls_server_config:
-  cert_file: /certs/server.crt
-  key_file: /certs/server.key
+  cert_file: /tmp/server.crt
+  key_file: /tmp/server.key
   # Optional: Require client certificates
   # client_auth_type: RequireAndVerifyClientCert
   # client_ca_file: /etc/ssl/certs/ca.crt
