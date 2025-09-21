@@ -23,6 +23,7 @@ services:
     volumes:
       - ./loki.yaml:/etc/loki/local-config.yaml
       - loki_data:/loki
+      - /etc/vault/certs:/certs:ro
     command: -config.file=/etc/loki/local-config.yaml
 
   prometheus:
@@ -31,9 +32,12 @@ services:
     command:
       - --web.enable-remote-write-receiver
       - --config.file=/etc/prometheus/prometheus.yml
+      - --web.config.file=/etc/prometheus/web-config.yml 
     volumes: 
       - ./prometheus.yml:/etc/prometheus/prometheus.yml
+      - ./prometheus-web-config.yml:/etc/prometheus/web-config.yml
       - prometheus_data:/prometheus 
+      - /etc/vault/certs:/certs:ro
     networks: 
       - alloy-net 
     ports:
@@ -51,9 +55,14 @@ services:
       - GF_SECURITY_ADMIN_PASSWORD=SuperStrongPassword
       - GF_SECURITY_DISABLE_LOGIN_FORM=false
       - GF_SECURITY_ALLOW_SIGN_UP=false
+      - GF_SERVER_PROTOCOL=https
+      - GF_SERVER_CERT_FILE=/certs/server.crt
+      - GF_SERVER_CERT_KEY=/certs/server.key
     volumes: 
       - ./grafana/provisioning:/etc/grafana/provisioning
       - grafana_data:/var/lib/grafana
+      - /etc/vault/certs:/certs:ro
+
 
 volumes:
   prometheus_data:
