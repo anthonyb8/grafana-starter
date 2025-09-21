@@ -25,8 +25,6 @@ services:
       - ./grafana/loki.yaml:/etc/loki/local-config.yaml
       - loki_data:/loki
       - /etc/vault/certs:/certs:ro
-      - ./scripts//update_cert.sh:/update_cert.sh:ro
-    entrypoint: ["/update_cert.sh"]
     command: -config.file=/etc/loki/local-config.yaml
     profiles:
       - grafana
