@@ -26,14 +26,16 @@ services:
       - /etc/vault/certs/server.crt:/certs/server.crt:ro
       - /etc/vault/certs/server.key:/certs/server.key:ro
       - /etc/vault/ca.crt:/certs/ca.crt:ro
+    depends_on:  
+      - grafana
+      - loki
+      - prometheus
     profiles:
       - nginx
 
   loki:
     image: grafana/loki:3.0.0
     container_name: loki
-    ports:
-      - "3100:3100"
     networks: 
       - alloy-net
     volumes:
@@ -58,8 +60,6 @@ services:
       - /etc/vault/certs:/certs:ro
     networks: 
       - alloy-net 
-    ports:
-      - "9090:9090"
     profiles:
       - grafana
 

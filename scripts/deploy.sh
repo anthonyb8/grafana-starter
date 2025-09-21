@@ -43,5 +43,6 @@ set +a
 
 echo "Starting production services..."
 docker compose --profile grafana up --build -d
+docker compose --profile nginx up --build -d
 
 echo "Deployment complete."
