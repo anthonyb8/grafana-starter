@@ -2,10 +2,10 @@
 set -e
 
 echo "Stoppping services..."
-docker compose -f grafana/compose.yml --profile "*" stop
+docker compose --profile "*" stop
 
 echo "Starting vault agent..."
-docker compose -f grafana/compose.yml --profile vault-agent up --build -d
+docker compose --profile vault-agent up --build -d
 
 echo "Waiting for vault agent to complete current cycle..."
 timeout=60
@@ -42,6 +42,6 @@ source /etc/vault/secrets/.env
 set +a
 
 echo "Starting production services..."
-docker compose -f grafana/compose.yml --profile grafana up --build -d
+docker compose --profile grafana up --build -d
 
 echo "Deployment complete."

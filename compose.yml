@@ -1,0 +1,83 @@
+services:  
+  vault-agent:
+    container_name: vault-agent
+    image: hashicorp/vault
+    command: agent -config=/vault/config/agent-config.hcl
+    env_file:
+      - /etc/vault/.env
+    volumes:
+      - ./vault/agent-config.hcl:/vault/config/agent-config.hcl:ro
+      - /etc/vault:/etc/vault
+      - ./vault/templates:/etc/vault/templates
+    cap_add:
+      - IPC_LOCK
+    profiles:
+      - vault-agent
+
+  loki:
+    image: grafana/loki:3.0.0
+    container_name: loki
+    ports:
+      - "3100:3100"
+    networks: 
+      - alloy-net
+    volumes:
+      - ./grafana/loki.yaml:/etc/loki/local-config.yaml
+      - loki_data:/loki
+      - /etc/vault/certs:/certs:ro
+      - ./scripts//update_cert.sh:/update_cert.sh:ro
+    entrypoint: ["/update_cert.sh"]
+    command: -config.file=/etc/loki/local-config.yaml
+    profiles:
+      - grafana
+
+  prometheus:
+    image: prom/prometheus:v2.47.0
+    container_name: prometheus
+    command:
+      - --web.enable-remote-write-receiver
+      - --config.file=/etc/prometheus/prometheus.yml
+      - --web.config.file=/etc/prometheus/web-config.yml 
+    volumes: 
+      - ./grafana/prometheus.yml:/etc/prometheus/prometheus.yml
+      - ./grafana/prometheus-web-config.yml:/etc/prometheus/web-config.yml
+      - prometheus_data:/prometheus 
+      - /etc/vault/certs:/certs:ro
+    networks: 
+      - alloy-net 
+    ports:
+      - "9090:9090"
+    profiles:
+      - grafana
+
+  grafana:
+    image: grafana/grafana:11.0.0
+    container_name: grafana
+    ports:
+      - "3000:3000"
+    networks: 
+      - alloy-net
+    environment:
+      - GF_SECURITY_ADMIN_USER=admin
+      - GF_SECURITY_ADMIN_PASSWORD=SuperStrongPassword
+      - GF_SECURITY_DISABLE_LOGIN_FORM=false
+      - GF_SECURITY_ALLOW_SIGN_UP=false
+      - GF_SERVER_PROTOCOL=https
+      - GF_SERVER_CERT_FILE=/certs/server.crt
+      - GF_SERVER_CERT_KEY=/certs/server.key
+    volumes: 
+      - ./grafana/provisioning:/etc/grafana/provisioning
+      - grafana_data:/var/lib/grafana
+      - /etc/vault/certs:/certs:ro
+    profiles:
+      - grafana
+
+
+volumes:
+  prometheus_data:
+  grafana_data:
+  loki_data:
+
+networks:
+  alloy-net:
+    driver: bridge
