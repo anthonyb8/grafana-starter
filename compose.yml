@@ -31,7 +31,7 @@ services:
       - loki
       - prometheus
     profiles:
-      - nginx
+      - grafana
 
   loki:
     image: grafana/loki:3.0.0
