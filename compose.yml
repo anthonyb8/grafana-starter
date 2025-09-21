@@ -39,7 +39,7 @@ services:
     networks: 
       - alloy-net
     volumes:
-      - ./grafana/loki.yaml:/etc/loki/local-config.yaml
+      - ./loki.yaml:/etc/loki/local-config.yaml
       - loki_data:/loki
       - /etc/vault/certs:/certs:ro
     command: -config.file=/etc/loki/local-config.yaml
@@ -52,10 +52,8 @@ services:
     command:
       - --web.enable-remote-write-receiver
       - --config.file=/etc/prometheus/prometheus.yml
-      - --web.config.file=/etc/prometheus/web-config.yml 
     volumes: 
-      - ./grafana/prometheus.yml:/etc/prometheus/prometheus.yml
-      - ./grafana/prometheus-web-config.yml:/etc/prometheus/web-config.yml
+      - ./prometheus.yml:/etc/prometheus/prometheus.yml
       - prometheus_data:/prometheus 
       - /etc/vault/certs:/certs:ro
     networks: 
