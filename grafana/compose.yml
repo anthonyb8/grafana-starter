@@ -1,5 +1,6 @@
 services:  
   vault-agent:
+    container_name: vault-agent
     image: hashicorp/vault
     command: agent -config=/vault/config/agent-config.hcl
     env_file:

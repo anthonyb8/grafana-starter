@@ -13,7 +13,7 @@ interval=5
 elapsed=0
 while true; do
   # Check if vault agent has successfully rendered all templates
-  logs=$(docker logs crm-vault-agent-1 --tail 50 2>&1)
+  logs=$(docker logs vault-agent --tail 50 2>&1)
 
   if echo "$logs" | grep -q "rendered.*cert.tpl.*server.crt" &&
     echo "$logs" | grep -q "rendered.*key.tpl.*server.key"; then
@@ -42,6 +42,6 @@ source /etc/vault/secrets/.env
 set +a
 
 echo "Starting production services..."
-docker compose -f grafana/compose.yml --profile prod up -d --build
+docker compose -f grafana/compose.yml --profile grafana up --build -d
 
 echo "Deployment complete."
