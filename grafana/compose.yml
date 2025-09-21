@@ -25,6 +25,8 @@ services:
       - loki_data:/loki
       - /etc/vault/certs:/certs:ro
     command: -config.file=/etc/loki/local-config.yaml
+    profiles:
+      - grafana
 
   prometheus:
     image: prom/prometheus:v2.47.0
@@ -42,6 +44,8 @@ services:
       - alloy-net 
     ports:
       - "9090:9090"
+    profiles:
+      - grafana
 
   grafana:
     image: grafana/grafana:11.0.0
@@ -62,6 +66,8 @@ services:
       - ./grafana/provisioning:/etc/grafana/provisioning
       - grafana_data:/var/lib/grafana
       - /etc/vault/certs:/certs:ro
+    profiles:
+      - grafana
 
 
 volumes:
