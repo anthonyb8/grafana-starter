@@ -3,15 +3,15 @@ auth_enabled: false
 server:
   http_listen_port: 3100
   grpc_listen_port: 9096
-
-  # Add TLS configuration
-  http_tls_config:
-    cert_file: /certs/server.crt
-    key_file: /certs/server.key
-
-  grpc_tls_config:
-    cert_file: /certs/server.crt
-    key_file: /certs/server.key
+  #
+  # # Add TLS configuration
+  # http_tls_config:
+  #   cert_file: /certs/server.crt
+  #   key_file: /certs/server.key
+  #
+  # grpc_tls_config:
+  #   cert_file: /certs/server.crt
+  #   key_file: /certs/server.key
 
 common:
   path_prefix: /loki

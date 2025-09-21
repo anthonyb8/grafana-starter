@@ -14,6 +14,21 @@ services:
     profiles:
       - vault-agent
 
+  nginx-prod:
+    image: nginx:alpine 
+    ports:
+      - 80:80
+      - 443:443
+    env_file: 
+      - /etc/vault/secrets/.env
+    volumes:
+      - ./nginx/nginx.prod.conf:/etc/nginx/templates/nginx.conf.template
+      - /etc/vault/certs/server.crt:/certs/server.crt:ro
+      - /etc/vault/certs/server.key:/certs/server.key:ro
+      - /etc/vault/ca.crt:/certs/ca.crt:ro
+    profiles:
+      - nginx
+
   loki:
     image: grafana/loki:3.0.0
     container_name: loki
