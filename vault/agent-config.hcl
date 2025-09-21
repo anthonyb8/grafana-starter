@@ -43,7 +43,7 @@ template {
 template {
   source      = "/etc/vault/templates/server-key.tpl" 
   destination = "/etc/vault/certs/server.key"
-  perms       = 0644
+  perms       = 0600
   #command     = "systemctl reload nginx || true"
 }
 

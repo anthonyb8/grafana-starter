@@ -2,7 +2,7 @@
 set -e
 
 echo "Stoppping services..."
-docker compose -f grafana/compose.yml --profile "*"stop
+docker compose -f grafana/compose.yml --profile "*" stop
 
 echo "Starting vault agent..."
 docker compose -f grafana/compose.yml --profile vault-agent up --build -d
