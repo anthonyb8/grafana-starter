@@ -72,7 +72,7 @@ services:
       - alloy-net
     environment:
       - GF_SECURITY_ADMIN_USER=admin
-      - GF_SECURITY_ADMIN_PASSWORD=SuperStrongPassword
+      - GF_SECURITY_ADMIN_PASSWORD=password
       - GF_SECURITY_DISABLE_LOGIN_FORM=false
       - GF_SECURITY_ALLOW_SIGN_UP=false
     volumes: 
