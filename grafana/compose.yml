@@ -19,14 +19,13 @@ services:
     container_name: loki
     ports:
       - "3100:3100"
+      - "9096:9096"  # Add GRPC port
     networks: 
       - alloy-net
     volumes:
       - ./loki.yaml:/etc/loki/local-config.yaml
       - loki_data:/loki
       - /etc/vault/certs:/certs:ro
-      - ./update_cert.sh:/update_cert.sh:ro
-    entrypoint: ["/update_cert.sh"]
     command: -config.file=/etc/loki/local-config.yaml
     profiles:
       - grafana

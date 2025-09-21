@@ -6,11 +6,12 @@ server:
 
   # Add TLS configuration
   http_tls_config:
-    cert_file: /tmp/server.crt
-    key_file: /tmp/server.key
+    cert_file: /certs/server.crt
+    key_file: /certs/server.key
+
   grpc_tls_config:
-    cert_file: /tmp/server.crt
-    key_file: tmp/server.key
+    cert_file: /certs/server.crt
+    key_file: /certs/server.key
 
 common:
   path_prefix: /loki
