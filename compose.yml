@@ -19,10 +19,6 @@ services:
     ports:
       - 80:80
       - 443:443
-    extra_hosts:
-      - "loki.internal:${GRAFANA_IP}"
-      - "prometheus.internal:${GRAFANA_IP}"
-      - "grafana.internal:${GRAFANA_IP}"
     env_file: 
       - /etc/vault/secrets/.env
     volumes:
