@@ -14,7 +14,7 @@ After=docker.service
 [Service]
 Type=simple
 ExecStart=/usr/local/bin/secret-reload.sh
-WorkingDirectory=/home/admin/CRM
+WorkingDirectory=/home/admin/grafana-starter
 Restart=always
 RestartSec=5
 
@@ -29,7 +29,7 @@ After=docker.service
 
 [Service]
 Type=simple
-WorkingDirectory=/home/admin/CRM
+WorkingDirectory=/home/admin/grafana-starter
 ExecStart=/usr/local/bin/cert-reload.sh
 Restart=always
 RestartSec=5
