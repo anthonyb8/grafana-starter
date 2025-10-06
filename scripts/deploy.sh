@@ -44,4 +44,8 @@ set +a
 echo "Starting production services..."
 docker compose --profile grafana up --build -d
 
+echo "Enabling cert and secert watch services..."
+sudo systemctl daemon-reload
+sudo systemctl restart secret-reload cert-reload
+
 echo "Deployment complete."
