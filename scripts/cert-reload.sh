@@ -7,7 +7,7 @@ while true; do
   if [ -f /etc/vault/.cert-trigger ]; then
     rm -f /etc/vault/.cert-trigger
     echo "$(date) - Detected trigger, restarting cert-dependent containers"
-    docker compose --profile reload up -d --build
+    docker compose --profile reload restart
   fi
   sleep 5
 done
