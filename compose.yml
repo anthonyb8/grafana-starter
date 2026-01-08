@@ -101,10 +101,7 @@ services:
         - /etc/vault/secrets/.env
       networks:
         - alloy-net
-      # ports:
-        # - 4040:4040  # ngrok web interface
       command: http nginx:443 --domain=${NGROK_DOMAIN} --log stdout
-      # command: http nginx:443 --log stdout
       profiles:
         - grafana
         - reload
