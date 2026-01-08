@@ -78,16 +78,14 @@ services:
     profiles:
       - grafana
       - reload
+
   grafana:
     image: grafana/grafana:11.0.0
     container_name: grafana
     networks: 
       - alloy-net
-    environment:
-      - GF_SECURITY_ADMIN_USER=admin
-      - GF_SECURITY_ADMIN_PASSWORD=password
-      - GF_SECURITY_DISABLE_LOGIN_FORM=false
-      - GF_SECURITY_ALLOW_SIGN_UP=false
+    env_file: 
+      - /etc/vault/secrets/.env
     volumes: 
       - ./grafana/provisioning:/etc/grafana/provisioning
       - grafana_data:/var/lib/grafana
@@ -96,6 +94,20 @@ services:
       - grafana
       - reload
 
+  ngrok:
+      image: ngrok/ngrok:latest
+      container_name: ngrok
+      env_file: 
+        - /etc/vault/secrets/.env
+      networks:
+        - alloy-net
+      # ports:
+        # - 4040:4040  # ngrok web interface
+      command: http nginx:443 --domain=${NGROK_DOMAIN} --log stdout
+      # command: http nginx:443 --log stdout
+      profiles:
+        - grafana
+        - reload
 
 volumes:
   prometheus_data:
