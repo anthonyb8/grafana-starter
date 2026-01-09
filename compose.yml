@@ -2,6 +2,7 @@ services:
   vault-agent:
     container_name: vault-agent
     image: hashicorp/vault
+    restart: unless-stopped
     command: agent -config=/vault/config/agent-config.hcl
     env_file:
       - /etc/vault/.env
@@ -30,6 +31,7 @@ services:
   nginx:
     image: nginx:alpine 
     container_name: nginx
+    restart: unless-stopped
     ports:
       - 80:80
       - 443:443
@@ -53,6 +55,7 @@ services:
   loki:
     image: grafana/loki:3.0.0
     container_name: loki
+    restart: unless-stopped
     networks: 
       - alloy-net
     volumes:
@@ -67,6 +70,7 @@ services:
   prometheus:
     image: prom/prometheus:v2.47.0
     container_name: prometheus
+    restart: unless-stopped
     command:
       - --web.enable-remote-write-receiver
       - --config.file=/etc/prometheus/prometheus.yml
@@ -83,6 +87,7 @@ services:
   grafana:
     image: grafana/grafana:11.0.0
     container_name: grafana
+    restart: unless-stopped
     networks: 
       - alloy-net
     env_file: 
@@ -96,16 +101,17 @@ services:
       - reload
 
   ngrok:
-      image: ngrok/ngrok:latest
-      container_name: ngrok
-      env_file: 
-        - /etc/vault/secrets/.env
-      networks:
-        - alloy-net
-      command: http nginx:443 --domain=${NGROK_DOMAIN} --log stdout
-      profiles:
-        - grafana
-        - reload
+    image: ngrok/ngrok:latest
+    container_name: ngrok
+    restart: unless-stopped
+    env_file: 
+      - /etc/vault/secrets/.env
+    networks:
+      - alloy-net
+    command: http nginx:443 --domain=${NGROK_DOMAIN} --log stdout
+    profiles:
+      - grafana
+      - reload
 
 volumes:
   prometheus_data:
