@@ -100,18 +100,18 @@ services:
       - grafana
       - reload
 
-  ngrok:
-    image: ngrok/ngrok:latest
-    container_name: ngrok
-    restart: unless-stopped
-    env_file: 
-      - /etc/vault/secrets/.env
-    networks:
-      - alloy-net
-    command: http nginx:443 --domain=${NGROK_DOMAIN} --log stdout
-    profiles:
-      - grafana
-      - reload
+  # ngrok:
+  #   image: ngrok/ngrok:latest
+  #   container_name: ngrok
+  #   restart: unless-stopped
+  #   env_file: 
+  #     - /etc/vault/secrets/.env
+  #   networks:
+  #     - alloy-net
+  #   command: http nginx:443 --domain=${NGROK_DOMAIN} --log stdout
+  #   profiles:
+  #     - grafana
+  #     - reload
 
 volumes:
   prometheus_data:
